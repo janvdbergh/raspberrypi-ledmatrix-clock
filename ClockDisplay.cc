@@ -57,7 +57,6 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
   options.rows = 32;
   options.chain_length = 2;
   options.parallel = 1;
-  options.show_refresh_rate = true;
 
   RuntimeOptions runtimeOptions;
   runtimeOptions.gpio_slowdown = 2;

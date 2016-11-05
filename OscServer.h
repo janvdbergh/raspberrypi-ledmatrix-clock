@@ -30,6 +30,9 @@ protected:
 
 private:
   ClockDisplay& clockDisplay;
+
+  virtual void setTime(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void clear(const osc::ReceivedMessageArgumentStream argumentsStream);
 };
 
 #endif //RPI_OSC_SERVER_H

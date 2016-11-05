@@ -17,25 +17,36 @@
 
 #include "OscServer.h"
 #include <iostream>
+#include <unistd.h>
 
 ClockOscPacketListener::ClockOscPacketListener(ClockDisplay& clockDisplay): clockDisplay(clockDisplay) {
 }
 
 void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message, const IpEndpointName& remoteEndpoint) {
-  if (strcmp(message.AddressPattern(), "/time") == 0) {
-      osc::int32 time;
-      osc::ReceivedMessageArgumentStream args = message.ArgumentStream();
-			args >> time >> osc::EndMessage;
+  try {
+    osc::ReceivedMessageArgumentStream arguments = message.ArgumentStream();
+    if (strcmp(message.AddressPattern(), "/time") == 0) {
+      setTime(arguments);
+    }
 
-      std::cout << "Setting time to " << time << std::endl;
-      clockDisplay.setTime(time);
+    if (strcmp(message.AddressPattern(), "/clear") == 0) {
+        clear(arguments);
+    }
+  } catch( osc::Exception& e ){
+    std::cerr << "!!! Error while parsing message: " << message.AddressPattern() << ": " << e.what() << "\n";
   }
+}
 
-  if (strcmp(message.AddressPattern(), "/clear") == 0) {
-      osc::ReceivedMessageArgumentStream args = message.ArgumentStream();
-			args >> osc::EndMessage;
-      std::cout << "Clearing display" << std::endl;
-      clockDisplay.clear();
-  }
+void ClockOscPacketListener::setTime(osc::ReceivedMessageArgumentStream arguments) {
+  osc::int32 time;
+  arguments >> time >> osc::EndMessage;
 
+  std::cout << "Setting time to " << time << std::endl;
+  clockDisplay.setTime(time);
+}
+
+void ClockOscPacketListener::clear(osc::ReceivedMessageArgumentStream arguments) {
+  arguments >> osc::EndMessage;
+  std::cout << "Clearing display" << std::endl;
+  clockDisplay.clear();
 }

@@ -1,8 +1,7 @@
 # Build artefacts
-*.so
-*.o
-clock
+bin
+obj
 
 # File system
 .DS_Store
-._.DS_Store
+._.*

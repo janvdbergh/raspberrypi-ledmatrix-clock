@@ -30,21 +30,13 @@ int main(int argc, char *argv[]) {
   }
 
   ClockOscPacketListener oscPacketListener(clockDisplay);
-
-  //for(int i=0; i<15; i++) {
-  //  clockDisplay.setTime(i*60 + 86400 * 4);
-  //  sleep(1);
-  //}
-
   UdpListeningReceiveSocket udpReceiveSocket(
           IpEndpointName(IpEndpointName::ANY_ADDRESS, PORT),
           &oscPacketListener);
 
-  std::cout << "press ctrl-c to end" << std::endl;
+  std::cout << "Press ctrl-c to end" << std::endl;
 
   udpReceiveSocket.RunUntilSigInt();
-
-  return 0;
 
   return 0;
 }

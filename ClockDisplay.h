@@ -25,14 +25,18 @@ public:
   virtual ~ClockDisplay();
 
   virtual bool initialize(int argc, char *argv[]);
+
+  virtual void setBrightness(int brightness);
   virtual void setTime(int secondsSinceStartOfWeek);
   virtual void clear();
 private:
-  rgb_matrix::Canvas* canvas;
-  rgb_matrix::Font* font;
+  rgb_matrix::Canvas* _canvas;
+  rgb_matrix::Font* _font;
+  rgb_matrix::Color _digitColor, _dayColor;
 
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);
   virtual void drawDigit(int position, int digit);
+  virtual void drawDay(int dayOfWeek);
 };
 
 #endif // RPI_CLOCK_DISPLAY_H

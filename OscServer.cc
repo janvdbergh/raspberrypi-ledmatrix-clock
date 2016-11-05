@@ -32,6 +32,9 @@ void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message,
     if (strcmp(message.AddressPattern(), "/clear") == 0) {
         clear(arguments);
     }
+    if (strcmp(message.AddressPattern(), "/brightness") == 0) {
+        setBrightness(arguments);
+    }
   } catch( osc::Exception& e ){
     std::cerr << "!!! Error while parsing message: " << message.AddressPattern() << ": " << e.what() << "\n";
   }
@@ -49,4 +52,12 @@ void ClockOscPacketListener::clear(osc::ReceivedMessageArgumentStream arguments)
   arguments >> osc::EndMessage;
   std::cout << "Clearing display" << std::endl;
   clockDisplay.clear();
+}
+
+void ClockOscPacketListener::setBrightness(osc::ReceivedMessageArgumentStream arguments) {
+  osc::int32 brightness;
+  arguments >> brightness >> osc::EndMessage;
+
+  std::cout << "Setting brightness to " << brightness << std::endl;
+  clockDisplay.setBrightness(brightness);
 }

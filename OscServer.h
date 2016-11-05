@@ -33,6 +33,7 @@ private:
 
   virtual void setTime(const osc::ReceivedMessageArgumentStream argumentsStream);
   virtual void clear(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void setBrightness(const osc::ReceivedMessageArgumentStream argumentsStream);
 };
 
 #endif //RPI_OSC_SERVER_H

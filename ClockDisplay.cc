@@ -136,53 +136,45 @@ void ClockDisplay::drawDigit(int position, int digit)  {
   int startX = DIGIT_START_X + DIGIT_WIDTH * position + (position >= 2 ? SEPARATOR_WIDTH : 0);
 
   // top
-  drawRectangle(
-    startX + DIGIT_BLOCK_HEIGHT, DIGIT_START_Y,
-    DIGIT_BLOCK_LENGTH, DIGIT_BLOCK_HEIGHT,
-    (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) {
+    drawRectangle(startX + 2, DIGIT_START_Y + 0, 6, 1, _digitColor);
+    drawRectangle(startX + 1, DIGIT_START_Y + 1, 8, 1, _digitColor);
+  }
 
   // middle
-  drawRectangle(
-    startX + DIGIT_BLOCK_HEIGHT, DIGIT_START_Y + DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
-    DIGIT_BLOCK_LENGTH, DIGIT_BLOCK_HEIGHT,
-    (digit==2 || digit==3 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==2 || digit==3 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) {
+    drawRectangle(startX + 2, DIGIT_START_Y + 8, 6, 2, _digitColor);
+  }
 
   // bottom
-  drawRectangle(
-    startX + DIGIT_BLOCK_HEIGHT, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT + 2 * DIGIT_BLOCK_LENGTH,
-    DIGIT_BLOCK_LENGTH, DIGIT_BLOCK_HEIGHT,
-    (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==8 || digit==9) {
+    drawRectangle(startX + 2, DIGIT_START_Y + 17, 6, 1, _digitColor);
+    drawRectangle(startX + 1, DIGIT_START_Y + 16, 8, 1, _digitColor);
+  }
 
   // left top
-  drawRectangle(
-    startX, DIGIT_START_Y + DIGIT_BLOCK_HEIGHT,
-    DIGIT_BLOCK_HEIGHT, DIGIT_BLOCK_LENGTH,
-    (digit==0 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) {
+    drawRectangle(startX + 1, DIGIT_START_Y + 1, 1, 8, _digitColor);
+    drawRectangle(startX + 0, DIGIT_START_Y + 2, 1, 6, _digitColor);
+  }
 
   // right top
-  drawRectangle(
-    startX + DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH, DIGIT_START_Y + DIGIT_BLOCK_HEIGHT,
-    DIGIT_BLOCK_HEIGHT, DIGIT_BLOCK_LENGTH,
-    (digit==0 || digit==1 || digit==2 || digit==3 || digit==4 || digit==7 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==1 || digit==2 || digit==3 || digit==4 || digit==7 || digit==8 || digit==9) {
+    drawRectangle(startX + 8, DIGIT_START_Y + 1, 1, 8, _digitColor);
+    drawRectangle(startX + 9, DIGIT_START_Y + 2, 1, 6, _digitColor);
+  }
 
   // left bottom
-  drawRectangle(
-    startX, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
-    DIGIT_BLOCK_HEIGHT, DIGIT_BLOCK_LENGTH,
-    (digit==0 || digit==2 || digit==6 || digit==8) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==2 || digit==6 || digit==8) {
+    drawRectangle(startX + 1, DIGIT_START_Y +  9, 1, 8, _digitColor);
+    drawRectangle(startX + 0, DIGIT_START_Y + 10, 1, 6, _digitColor);
+  }
 
   // right bottom
-  drawRectangle(
-    startX + DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
-    DIGIT_BLOCK_HEIGHT, DIGIT_BLOCK_LENGTH,
-    (digit==0 || digit==1 || digit==3 || digit==4 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) ? _digitColor : DARK_RED
-  );
+  if (digit==0 || digit==1 || digit==3 || digit==4 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) {
+    drawRectangle(startX + 8, DIGIT_START_Y +  9, 1, 8, _digitColor);
+    drawRectangle(startX + 9, DIGIT_START_Y + 10, 1, 6, _digitColor);
+  }
 }
 
 void ClockDisplay::drawDots() {

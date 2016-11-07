@@ -41,8 +41,7 @@ const int SEPARATOR_DOT_SIZE = 2;
 const int DIGIT_WIDTH = DIGIT_BLOCK_LENGTH + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_SEPARATOR_WIDTH;
 const int SEPARATOR_WIDTH = SEPARATOR_DOT_SIZE + DIGIT_SEPARATOR_WIDTH;
 
-ClockDisplay::ClockDisplay(): _digitColor(0, 0, 0), _dayColor(0, 0, 0) {
-  this->setBrightness(127);
+ClockDisplay::ClockDisplay(): _secondsSinceStartOfWeek(-1), _digitColor(127, 0, 0), _dayColor(0, 127, 0) {
 }
 
 ClockDisplay::~ClockDisplay() {
@@ -83,39 +82,39 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
 void ClockDisplay::setBrightness(int brightness) {
   _digitColor = Color(brightness, 0, 0);
   _dayColor = Color(0, brightness, 0);
+  refreshDisplay();
 }
 
 void ClockDisplay::setTime(int secondsSinceStartOfWeek) {
-  clear();
-
-  int day = secondsSinceStartOfWeek / 86400 % 7;
-  int hours = secondsSinceStartOfWeek % 86400 / 3600;
-  int minutes = secondsSinceStartOfWeek % 3600 / 60;
-
-  // Digits
-  drawDigit(0, hours / 10);
-  drawDigit(1, hours % 10);
-  drawDigit(2, minutes / 10);
-  drawDigit(3, minutes % 10);
-
-  // Dots between hours and minutes
-  drawRectangle(
-    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT,
-    2, 2,
-    _digitColor
-  );
-  drawRectangle(
-    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 3 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
-    2, 2,
-    _digitColor
-  );
-
-  // Day name
-  drawDay(day);
+  _secondsSinceStartOfWeek = secondsSinceStartOfWeek;
+  refreshDisplay();
 }
 
 void ClockDisplay::clear() {
+  _secondsSinceStartOfWeek = -1;
+  refreshDisplay();
+}
+
+void ClockDisplay::refreshDisplay() {
   _canvas->Clear();
+
+  if (_secondsSinceStartOfWeek >= 0) {
+    int day = _secondsSinceStartOfWeek / 86400 % 7;
+    int hours = _secondsSinceStartOfWeek % 86400 / 3600;
+    int minutes = _secondsSinceStartOfWeek % 3600 / 60;
+
+    // Digits
+    drawDigit(0, hours / 10);
+    drawDigit(1, hours % 10);
+    drawDigit(2, minutes / 10);
+    drawDigit(3, minutes % 10);
+
+    // Dots between hours and minutes
+    drawDots();
+
+    // Day name
+    drawDay(day);
+  }
 }
 
 void ClockDisplay::drawRectangle(int x, int y, int width, int height, const Color &color) {
@@ -176,6 +175,19 @@ void ClockDisplay::drawDigit(int position, int digit)  {
     startX + DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
     DIGIT_BLOCK_HEIGHT, DIGIT_BLOCK_LENGTH,
     (digit==0 || digit==1 || digit==3 || digit==4 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) ? _digitColor : DARK_RED
+  );
+}
+
+void ClockDisplay::drawDots() {
+  drawRectangle(
+    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT,
+    2, 2,
+    _digitColor
+  );
+  drawRectangle(
+    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 3 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
+    2, 2,
+    _digitColor
   );
 }
 

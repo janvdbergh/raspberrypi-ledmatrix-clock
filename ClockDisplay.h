@@ -30,13 +30,16 @@ public:
   virtual void setTime(int secondsSinceStartOfWeek);
   virtual void clear();
 private:
+  int _secondsSinceStartOfWeek;
+  rgb_matrix::Color _digitColor, _dayColor;
   rgb_matrix::Canvas* _canvas;
   rgb_matrix::Font* _font;
-  rgb_matrix::Color _digitColor, _dayColor;
-
+  
+  virtual void refreshDisplay();
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);
   virtual void drawDigit(int position, int digit);
   virtual void drawDay(int dayOfWeek);
+  virtual void drawDots();
 };
 
 #endif // RPI_CLOCK_DISPLAY_H

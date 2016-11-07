@@ -30,7 +30,7 @@ const int DISPLAY_WIDTH = 64;
 const int FONT_WIDTH = 6;
 const int TEXT_START_Y = 9;
 
-const Color DARK_RED(12, 0, 0);
+const Color DARK_RED(2, 0, 0);
 
 const int DIGIT_START_X = 7;
 const int DIGIT_START_Y = 12;
@@ -77,6 +77,10 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
   }
 
   return true;
+}
+
+int ClockDisplay::getBrightness() const {
+  return _digitColor.r;
 }
 
 void ClockDisplay::setBrightness(int brightness) {

@@ -19,6 +19,8 @@
 #include <iostream>
 #include <unistd.h>
 
+const int FADE_STEP_MS = 10;
+
 ClockOscPacketListener::ClockOscPacketListener(ClockDisplay& clockDisplay): clockDisplay(clockDisplay) {
 }
 
@@ -35,6 +37,9 @@ void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message,
     if (strcmp(message.AddressPattern(), "/brightness") == 0) {
         setBrightness(arguments);
     }
+    if (strcmp(message.AddressPattern(), "/fade") == 0) {
+        fadeBrightness(arguments);
+    }
   } catch( osc::Exception& e ){
     std::cerr << "!!! Error while parsing message: " << message.AddressPattern() << ": " << e.what() << "\n";
   }
@@ -43,21 +48,40 @@ void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message,
 void ClockOscPacketListener::setTime(osc::ReceivedMessageArgumentStream arguments) {
   osc::int32 time;
   arguments >> time >> osc::EndMessage;
-
   std::cout << "Setting time to " << time << std::endl;
+
   clockDisplay.setTime(time);
 }
 
 void ClockOscPacketListener::clear(osc::ReceivedMessageArgumentStream arguments) {
   arguments >> osc::EndMessage;
   std::cout << "Clearing display" << std::endl;
+
   clockDisplay.clear();
 }
 
 void ClockOscPacketListener::setBrightness(osc::ReceivedMessageArgumentStream arguments) {
   osc::int32 brightness;
   arguments >> brightness >> osc::EndMessage;
-
   std::cout << "Setting brightness to " << brightness << std::endl;
+
   clockDisplay.setBrightness(brightness);
+}
+
+void ClockOscPacketListener::fadeBrightness(osc::ReceivedMessageArgumentStream arguments) {
+  osc::int32 newBrightness, durationMs;
+  arguments >> newBrightness >> durationMs >> osc::EndMessage;
+  std::cout << "Fading brightness to " << newBrightness << " in " << durationMs << " ms" << std::endl;
+
+  double currentBrightness = clockDisplay.getBrightness();
+  double increment = 1.0 * (newBrightness - currentBrightness) / durationMs * FADE_STEP_MS;
+
+  for(int time = 0; time < durationMs; time += FADE_STEP_MS) {
+    currentBrightness += increment;
+    clockDisplay.setBrightness(currentBrightness);
+
+    usleep(FADE_STEP_MS * 1000);
+  }
+
+  clockDisplay.setBrightness(newBrightness);
 }

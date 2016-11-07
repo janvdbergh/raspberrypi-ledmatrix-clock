@@ -26,6 +26,7 @@ public:
 
   virtual bool initialize(int argc, char *argv[]);
 
+  virtual int getBrightness() const;
   virtual void setBrightness(int brightness);
   virtual void setTime(int secondsSinceStartOfWeek);
   virtual void clear();

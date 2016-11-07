@@ -29,14 +29,14 @@ public:
 
   virtual int getBrightness() const;
   virtual void setBrightness(int brightness);
-  virtual void setTime(int secondsSinceStartOfWeek);
+  virtual void setTime(int minutesSinceStartOfWeek);
   virtual void clear();
 private:
   rgb_matrix::RGBMatrix* _rgbMatrix;
   rgb_matrix::FrameCanvas* _frameCanvas;
   rgb_matrix::Color _digitColor, _dayColor;
   rgb_matrix::Font* _font;
-  int _secondsSinceStartOfWeek;
+  int _minutesSinceStartOfWeek;
 
   virtual void refreshDisplay();
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);

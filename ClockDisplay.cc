@@ -28,19 +28,11 @@ const char *DAYS[] = { "ZONDAG", "MAANDAG", "DINSDAG", "WOENSDAG", "DONDERDAG", 
 const int DISPLAY_WIDTH = 64;
 const int FONT_WIDTH = 6;
 const int TEXT_START_Y = 9;
-
-const Color DARK_RED(2, 0, 0);
-
+const int BDF_FONT_FILE_DAY = 7;
 const int DIGIT_START_X = 7;
 const int DIGIT_START_Y = 12;
-const int DIGIT_BLOCK_LENGTH = 6;
-const int DIGIT_BLOCK_HEIGHT = 2;
-const int DIGIT_SEPARATOR_WIDTH = 2;
-const int SEPARATOR_DOT_SIZE = 2;
-const int DIGIT_WIDTH = DIGIT_BLOCK_LENGTH + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_SEPARATOR_WIDTH;
-const int SEPARATOR_WIDTH = SEPARATOR_DOT_SIZE + DIGIT_SEPARATOR_WIDTH;
 
-ClockDisplay::ClockDisplay(): _digitColor(127, 0, 0), _dayColor(0, 127, 0), _secondsSinceStartOfWeek(-1) {
+ClockDisplay::ClockDisplay(): _digitColor(127, 0, 0), _dayColor(0, 127, 0), _minutesSinceStartOfWeek(-1) {
 }
 
 ClockDisplay::~ClockDisplay() {
@@ -90,23 +82,23 @@ void ClockDisplay::setBrightness(int brightness) {
   refreshDisplay();
 }
 
-void ClockDisplay::setTime(int secondsSinceStartOfWeek) {
-  _secondsSinceStartOfWeek = secondsSinceStartOfWeek;
+void ClockDisplay::setTime(int minutesSinceStartOfWeek) {
+  _minutesSinceStartOfWeek = minutesSinceStartOfWeek;
   refreshDisplay();
 }
 
 void ClockDisplay::clear() {
-  _secondsSinceStartOfWeek = -1;
+  _minutesSinceStartOfWeek = -1;
   refreshDisplay();
 }
 
 void ClockDisplay::refreshDisplay() {
   _frameCanvas->Clear();
 
-  if (_secondsSinceStartOfWeek >= 0) {
-    int day = _secondsSinceStartOfWeek / 86400 % 7;
-    int hours = _secondsSinceStartOfWeek % 86400 / 3600;
-    int minutes = _secondsSinceStartOfWeek % 3600 / 60;
+  if (_minutesSinceStartOfWeek >= 0) {
+    int day = _minutesSinceStartOfWeek / 1440 % 7;
+    int hours = _minutesSinceStartOfWeek % 1440 / 60;
+    int minutes = _minutesSinceStartOfWeek % 60;
 
     // Digits
     drawDigit(0, hours / 10);
@@ -133,7 +125,10 @@ void ClockDisplay::drawRectangle(int x, int y, int width, int height, const Colo
 }
 
 void ClockDisplay::drawDigit(int position, int digit)  {
-  int startX = DIGIT_START_X + DIGIT_WIDTH * position + (position >= 2 ? SEPARATOR_WIDTH : 0);
+  int startX = DIGIT_START_X + position * 12;
+  if (position >= 2) {
+    startX += 4;
+  }
 
   // top
   if (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) {
@@ -178,16 +173,8 @@ void ClockDisplay::drawDigit(int position, int digit)  {
 }
 
 void ClockDisplay::drawDots() {
-  drawRectangle(
-    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 2 * DIGIT_BLOCK_HEIGHT,
-    2, 2,
-    _digitColor
-  );
-  drawRectangle(
-    DIGIT_START_X + 2 * DIGIT_WIDTH, DIGIT_START_Y + 3 * DIGIT_BLOCK_HEIGHT + DIGIT_BLOCK_LENGTH,
-    2, 2,
-    _digitColor
-  );
+  drawRectangle(DIGIT_START_X + 24, DIGIT_START_Y +  4, 2, 2, _digitColor);
+  drawRectangle(DIGIT_START_X + 24, DIGIT_START_Y + 12, 2, 2, _digitColor);
 }
 
 void ClockDisplay::drawDay(int dayOfWeek) {

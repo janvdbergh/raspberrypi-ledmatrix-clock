@@ -16,7 +16,6 @@
  */
 
 #include "ClockDisplay.h"
-#include "led-matrix.h"
 
 #include <iostream>
 #include <stdio.h>
@@ -41,12 +40,12 @@ const int SEPARATOR_DOT_SIZE = 2;
 const int DIGIT_WIDTH = DIGIT_BLOCK_LENGTH + 2 * DIGIT_BLOCK_HEIGHT + DIGIT_SEPARATOR_WIDTH;
 const int SEPARATOR_WIDTH = SEPARATOR_DOT_SIZE + DIGIT_SEPARATOR_WIDTH;
 
-ClockDisplay::ClockDisplay(): _secondsSinceStartOfWeek(-1), _digitColor(127, 0, 0), _dayColor(0, 127, 0) {
+ClockDisplay::ClockDisplay(): _digitColor(127, 0, 0), _dayColor(0, 127, 0), _secondsSinceStartOfWeek(-1) {
 }
 
 ClockDisplay::~ClockDisplay() {
-  if (_canvas) {
-    delete _canvas;
+  if (_rgbMatrix) {
+    delete _rgbMatrix;
   }
   if (_font) {
     delete _font;
@@ -62,9 +61,9 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
 
   RuntimeOptions runtimeOptions;
   runtimeOptions.gpio_slowdown = 2;
-  _canvas = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &options, &runtimeOptions);
+  _rgbMatrix = rgb_matrix::CreateMatrixFromFlags(&argc, &argv, &options, &runtimeOptions);
 
-  if (_canvas == NULL) {
+  if (_rgbMatrix == NULL) {
     std::cerr <<  "Could not initialize matrix" << std::endl;
     rgb_matrix::PrintMatrixFlags(stderr);
     return false;
@@ -75,6 +74,8 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
     std::cerr <<  "Could not load font " << BDF_FONT_FILE << std::endl;
     return false;
   }
+
+  _frameCanvas = _rgbMatrix->CreateFrameCanvas();
 
   return true;
 }
@@ -100,7 +101,7 @@ void ClockDisplay::clear() {
 }
 
 void ClockDisplay::refreshDisplay() {
-  _canvas->Clear();
+  _frameCanvas->Clear();
 
   if (_secondsSinceStartOfWeek >= 0) {
     int day = _secondsSinceStartOfWeek / 86400 % 7;
@@ -119,12 +120,14 @@ void ClockDisplay::refreshDisplay() {
     // Day name
     drawDay(day);
   }
+
+  _rgbMatrix->SwapOnVSync(_frameCanvas);
 }
 
 void ClockDisplay::drawRectangle(int x, int y, int width, int height, const Color &color) {
   for(int i = 0; i < width; i++) {
     for (int j = 0; j < height; j++) {
-      _canvas->SetPixel(x + i, y + j, color.r, color.g, color.b);
+      _frameCanvas->SetPixel(x + i, y + j, color.r, color.g, color.b);
     }
   }
 }
@@ -198,5 +201,5 @@ void ClockDisplay::drawDots() {
 void ClockDisplay::drawDay(int dayOfWeek) {
   const char* dayName = DAYS[dayOfWeek];
   int textX = (DISPLAY_WIDTH / 2) - strlen(dayName) * FONT_WIDTH / 2;
-  DrawText(_canvas, *_font, textX, TEXT_START_Y, _dayColor, dayName);
+  DrawText(_frameCanvas, *_font, textX, TEXT_START_Y, _dayColor, dayName);
 }

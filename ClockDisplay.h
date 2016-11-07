@@ -17,6 +17,7 @@
 
 #ifndef RPI_CLOCK_DISPLAY_H
 #define RPI_CLOCK_DISPLAY_H
+#include <led-matrix.h>
 #include <graphics.h>
 
 class ClockDisplay {
@@ -31,11 +32,12 @@ public:
   virtual void setTime(int secondsSinceStartOfWeek);
   virtual void clear();
 private:
-  int _secondsSinceStartOfWeek;
+  rgb_matrix::RGBMatrix* _rgbMatrix;
+  rgb_matrix::FrameCanvas* _frameCanvas;
   rgb_matrix::Color _digitColor, _dayColor;
-  rgb_matrix::Canvas* _canvas;
   rgb_matrix::Font* _font;
-  
+  int _secondsSinceStartOfWeek;
+
   virtual void refreshDisplay();
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);
   virtual void drawDigit(int position, int digit);

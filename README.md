@@ -6,6 +6,6 @@ This code requires
 
 ## Supported commands:
 - `/time <time in minutes since Sunday 00:00>`: display a time.
-- `clear`: clear the display.
-- `brightness <value>`: sets the brightness (0 - 255).
-- `fade <value> <time>`: fades to certain brightness in specific time (in ms).
+- `/clear`: clear the display.
+- `/brightness <value>`: sets the brightness (0 - 255).
+- `/fade <value> <time>`: fades to certain brightness in specific time (in ms).

@@ -38,10 +38,10 @@ private:
   virtual void setTime(int time);
 
   virtual void setBrightness(const osc::ReceivedMessageArgumentStream argumentsStream);
-  virtual void setBrightness(int brightness);
+  virtual void setBrightness(double brightness);
 
   virtual void fadeBrightnessTo(const osc::ReceivedMessageArgumentStream argumentsStream);
-  virtual void fadeBrightnessTo(int newBrightness, int durationMs);
+  virtual void fadeBrightnessTo(double newBrightness, int durationMs);
 
   virtual void forwardTimeTo(const osc::ReceivedMessageArgumentStream argumentsStream);
   virtual void forwardTimeTo(int newTime, int durationMs);

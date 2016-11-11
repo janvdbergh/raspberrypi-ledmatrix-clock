@@ -71,19 +71,19 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
 
   _frameCanvas = _rgbMatrix->CreateFrameCanvas();
 
-  setBrightness(50);
+  setBrightness(0.5);
 
   return true;
 }
 
-int ClockDisplay::getBrightness() const {
+double ClockDisplay::getBrightness() const {
   return _brightness;
 }
 
-void ClockDisplay::setBrightness(int brightness) {
+void ClockDisplay::setBrightness(double brightness) {
   _brightness = brightness;
 
-  int correctedBrightness = 255 * pow(brightness/255.0, 2.2);
+  int correctedBrightness = 255 * pow(brightness, 2.2);
   _digitColor = Color(correctedBrightness, 0, 0);
   _dayColor = Color(0, correctedBrightness, 0);
   refreshDisplay();

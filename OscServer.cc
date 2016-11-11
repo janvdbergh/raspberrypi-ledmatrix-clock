@@ -76,23 +76,24 @@ void ClockOscPacketListener::clear() {
 }
 
 void ClockOscPacketListener::setBrightness(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 brightness;
+  float brightness;
   arguments >> brightness >> osc::EndMessage;
   setBrightness(brightness);
 }
 
-void ClockOscPacketListener::setBrightness(int brightness) {
+void ClockOscPacketListener::setBrightness(double brightness) {
   std::cout << "Setting brightness to " << brightness << std::endl;
   clockDisplay.setBrightness(brightness);
 }
 
 void ClockOscPacketListener::fadeBrightnessTo(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 newBrightness, durationMs;
+  osc::int32 durationMs;
+  float newBrightness;
   arguments >> newBrightness >> durationMs >> osc::EndMessage;
   fadeBrightnessTo(newBrightness, durationMs);
 }
 
-void ClockOscPacketListener::fadeBrightnessTo(int newBrightness, int durationMs) {
+void ClockOscPacketListener::fadeBrightnessTo(double newBrightness, int durationMs) {
   std::cout << "Fading brightness to " << newBrightness << " in " << durationMs << " ms" << std::endl;
 
   double currentBrightness = clockDisplay.getBrightness();
@@ -116,7 +117,7 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
   std::cout << "Forwarding to " << newTime << " in " << durationMs << " ms" << std::endl;
 
   int startTime = clockDisplay.getTime();
-  float steepness = 2 * log(2.0 * (newTime - startTime) - 1);
+  double steepness = 2 * log(2.0 * (newTime - startTime) - 1);
   for(int stepper = 0; stepper <= durationMs; stepper += STEP_IN_MS) {
     int timeValue = startTime + (newTime - startTime)/(1 + exp(-steepness * (stepper - durationMs / 2.0) / durationMs));
     clockDisplay.setTime(timeValue);
@@ -128,28 +129,30 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
 }
 
 void ClockOscPacketListener::show(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 time, brightness, fadeTimeMs, waitTimeMs;
+  osc::int32 time, fadeTimeMs, waitTimeMs;
+  float brightness;
   arguments >> time >> brightness >> fadeTimeMs >> waitTimeMs >> osc::EndMessage;
 
-  setBrightness(0);
+  setBrightness(0.0);
   setTime(time);
   fadeBrightnessTo(brightness, fadeTimeMs);
   usleep(waitTimeMs * 1000);
-  fadeBrightnessTo(0, fadeTimeMs);
+  fadeBrightnessTo(0.0, fadeTimeMs);
 
   clear();
 }
 
 void ClockOscPacketListener::showAndForward(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 startTime, endTime, brightness, fadeTimeMs, forwardTimeMs, waitTimeMs;
+  osc::int32 startTime, endTime, fadeTimeMs, forwardTimeMs, waitTimeMs;
+  float brightness;
   arguments >> startTime >> endTime >> brightness >> fadeTimeMs >> forwardTimeMs >> waitTimeMs >> osc::EndMessage;
 
-  setBrightness(0);
+  setBrightness(0.0);
   setTime(startTime);
   fadeBrightnessTo(brightness, fadeTimeMs);
   forwardTimeTo(endTime, forwardTimeMs);
   usleep(waitTimeMs * 1000);
-  fadeBrightnessTo(0, fadeTimeMs);
+  fadeBrightnessTo(0.0, fadeTimeMs);
 
   clear();
 }

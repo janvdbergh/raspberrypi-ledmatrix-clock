@@ -27,8 +27,8 @@ public:
 
   virtual bool initialize(int argc, char *argv[]);
 
-  virtual int getBrightness() const;
-  virtual void setBrightness(int brightness);
+  virtual double getBrightness() const;
+  virtual void setBrightness(double brightness);
 
   virtual int getTime() const;
   virtual void setTime(int minutesSinceStartOfWeek);
@@ -40,7 +40,7 @@ private:
   rgb_matrix::Color _digitColor, _dayColor;
   rgb_matrix::Font* _font;
   int _minutesSinceStartOfWeek;
-  int _brightness;
+  double _brightness;
 
   virtual void refreshDisplay();
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);

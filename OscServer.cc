@@ -105,18 +105,18 @@ void ClockOscPacketListener::fadeBrightnessTo(int newBrightness, int durationMs)
 
 void ClockOscPacketListener::forwardTimeTo(osc::ReceivedMessageArgumentStream arguments) {
   osc::int32 newTime, durationMs;
-  float steepness;
-  arguments >> newTime >> durationMs >> steepness >> osc::EndMessage;
-  forwardTimeTo(newTime, durationMs, steepness);
+  arguments >> newTime >> durationMs >> osc::EndMessage;
+  forwardTimeTo(newTime, durationMs);
 }
 
-void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs, float steepness) {
+void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
   std::cout << "Forwarding to " << newTime << " in " << durationMs << " ms" << std::endl;
 
   int startTime = clockDisplay.getTime();
-  steepness /= newTime - startTime;
-  for(int stepper = 0; stepper <= durationMs; stepper += 10) {
-    int timeValue = startTime + (newTime - startTime)/(1 + exp(-steepness * (stepper - durationMs / 2.0)));
+  float steepness = 2 * log(2.0 * (newTime - startTime) - 1);
+  std::cout << steepness << std::endl;
+  for(int stepper = 0; stepper <= durationMs; stepper += STEP_IN_MS) {
+    int timeValue = startTime + (newTime - startTime)/(1 + exp(-steepness * (stepper - durationMs / 2.0) / durationMs));
     clockDisplay.setTime(timeValue);
 
     usleep(STEP_IN_MS * 1000);
@@ -126,14 +126,15 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs, float st
 }
 
 void ClockOscPacketListener::showAndForward(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 startTime, endTime, brightness, fadeTimeMs, forwardTimeMs;
-  float steepness;
-  arguments >> startTime >> endTime >> brightness >> fadeTimeMs >> forwardTimeMs >> steepness >> osc::EndMessage;
+  osc::int32 startTime, endTime, brightness, fadeTimeMs, forwardTimeMs, waitTimeMs;
+  arguments >> startTime >> endTime >> brightness >> fadeTimeMs >> forwardTimeMs >> waitTimeMs >> osc::EndMessage;
 
   setBrightness(0);
   setTime(startTime);
   fadeBrightnessTo(brightness, fadeTimeMs);
-  forwardTimeTo(endTime, forwardTimeMs, steepness);
+  forwardTimeTo(endTime, forwardTimeMs);
+  usleep(waitTimeMs * 1000);
   fadeBrightnessTo(0, fadeTimeMs);
+
   clear();
 }

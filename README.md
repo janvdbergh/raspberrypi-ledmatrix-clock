@@ -9,3 +9,5 @@ This code requires
 - `/clear`: clear the display.
 - `/brightness <value>`: sets the brightness (0 - 255).
 - `/fade <value> <time>`: fades to certain brightness in specific time (in ms).
+- `/forward <time> <duration>`: forwards the time to the specified end time in duration ms.
+- `/showAndForward <start time> <end time> <brightness> <fade time> <forward time> <wait time>`: fades the clock in on start time, forwards it to end time, waits wait time and fades out again.

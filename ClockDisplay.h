@@ -29,7 +29,10 @@ public:
 
   virtual int getBrightness() const;
   virtual void setBrightness(int brightness);
+
+  virtual int getTime() const;
   virtual void setTime(int minutesSinceStartOfWeek);
+  
   virtual void clear();
 private:
   rgb_matrix::RGBMatrix* _rgbMatrix;

@@ -26,15 +26,27 @@ public:
   ClockOscPacketListener(ClockDisplay& clockDisplay);
 
 protected:
-  virtual void ProcessMessage(const osc::ReceivedMessage& m, const IpEndpointName& remoteEndpoint);
+  virtual void ProcessMessage(const osc::ReceivedMessage& message, const IpEndpointName& remoteEndpoint);
 
 private:
   ClockDisplay& clockDisplay;
 
-  virtual void setTime(const osc::ReceivedMessageArgumentStream argumentsStream);
   virtual void clear(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void clear();
+
+  virtual void setTime(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void setTime(int time);
+
   virtual void setBrightness(const osc::ReceivedMessageArgumentStream argumentsStream);
-  virtual void fadeBrightness(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void setBrightness(int brightness);
+
+  virtual void fadeBrightnessTo(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void fadeBrightnessTo(int newBrightness, int durationMs);
+
+  virtual void forwardTimeTo(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void forwardTimeTo(int newTime, int durationMs);
+
+  virtual void showAndForward(const osc::ReceivedMessageArgumentStream argumentsStream);
 };
 
 #endif //RPI_OSC_SERVER_H

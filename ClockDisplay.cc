@@ -132,43 +132,37 @@ void ClockDisplay::drawDigit(int position, int digit)  {
 
   // top
   if (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) {
-    drawRectangle(startX + 2, DIGIT_START_Y + 0, 6, 1, _digitColor);
-    drawRectangle(startX + 1, DIGIT_START_Y + 1, 8, 1, _digitColor);
+    drawRectangle(startX, DIGIT_START_Y, 10, 2, _digitColor);
   }
 
   // middle
   if (digit==2 || digit==3 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) {
-    drawRectangle(startX + 2, DIGIT_START_Y + 8, 6, 2, _digitColor);
+    drawRectangle(startX, DIGIT_START_Y + 8, 10, 2, _digitColor);
   }
 
   // bottom
   if (digit==0 || digit==2 || digit==3 || digit==5 || digit==6 || digit==8 || digit==9) {
-    drawRectangle(startX + 2, DIGIT_START_Y + 17, 6, 1, _digitColor);
-    drawRectangle(startX + 1, DIGIT_START_Y + 16, 8, 1, _digitColor);
+    drawRectangle(startX, DIGIT_START_Y + 16, 10, 2, _digitColor);
   }
 
   // left top
   if (digit==0 || digit==4 || digit==5 || digit==6 || digit==8 || digit==9) {
-    drawRectangle(startX + 1, DIGIT_START_Y + 1, 1, 8, _digitColor);
-    drawRectangle(startX + 0, DIGIT_START_Y + 2, 1, 6, _digitColor);
+    drawRectangle(startX, DIGIT_START_Y, 2, 10, _digitColor);
   }
 
   // right top
   if (digit==0 || digit==1 || digit==2 || digit==3 || digit==4 || digit==7 || digit==8 || digit==9) {
-    drawRectangle(startX + 8, DIGIT_START_Y + 1, 1, 8, _digitColor);
-    drawRectangle(startX + 9, DIGIT_START_Y + 2, 1, 6, _digitColor);
+    drawRectangle(startX + 8, DIGIT_START_Y, 2, 10, _digitColor);
   }
 
   // left bottom
   if (digit==0 || digit==2 || digit==6 || digit==8) {
-    drawRectangle(startX + 1, DIGIT_START_Y +  9, 1, 8, _digitColor);
-    drawRectangle(startX + 0, DIGIT_START_Y + 10, 1, 6, _digitColor);
+    drawRectangle(startX, DIGIT_START_Y + 8, 2, 10, _digitColor);
   }
 
   // right bottom
   if (digit==0 || digit==1 || digit==3 || digit==4 || digit==5 || digit==6 || digit==7 || digit==8 || digit==9) {
-    drawRectangle(startX + 8, DIGIT_START_Y +  9, 1, 8, _digitColor);
-    drawRectangle(startX + 9, DIGIT_START_Y + 10, 1, 6, _digitColor);
+    drawRectangle(startX + 8, DIGIT_START_Y + 8, 2, 10, _digitColor);
   }
 }
 

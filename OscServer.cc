@@ -114,7 +114,6 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
 
   int startTime = clockDisplay.getTime();
   float steepness = 2 * log(2.0 * (newTime - startTime) - 1);
-  std::cout << steepness << std::endl;
   for(int stepper = 0; stepper <= durationMs; stepper += STEP_IN_MS) {
     int timeValue = startTime + (newTime - startTime)/(1 + exp(-steepness * (stepper - durationMs / 2.0) / durationMs));
     clockDisplay.setTime(timeValue);

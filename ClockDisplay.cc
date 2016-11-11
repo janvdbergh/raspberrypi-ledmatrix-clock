@@ -31,8 +31,10 @@ const int TEXT_START_Y = 9;
 const int BDF_FONT_FILE_DAY = 7;
 const int DIGIT_START_X = 7;
 const int DIGIT_START_Y = 12;
+const float GAMMA = 2.2;
 
-ClockDisplay::ClockDisplay(): _digitColor(127, 0, 0), _dayColor(0, 127, 0), _minutesSinceStartOfWeek(-1) {
+ClockDisplay::ClockDisplay(): _digitColor(0, 0, 0), _dayColor(0, 0, 0), _minutesSinceStartOfWeek(-1) {
+  setBrightness(50);
 }
 
 ClockDisplay::~ClockDisplay() {
@@ -73,12 +75,15 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
 }
 
 int ClockDisplay::getBrightness() const {
-  return _digitColor.r;
+  return _brightness;
 }
 
 void ClockDisplay::setBrightness(int brightness) {
-  _digitColor = Color(brightness, 0, 0);
-  _dayColor = Color(0, brightness, 0);
+  _brightness = brightness;
+
+  int correctedBrightness = 255 * pow(brightness/255.0, 2.2);
+  _digitColor = Color(correctedBrightness, 0, 0);
+  _dayColor = Color(0, correctedBrightness, 0);
   refreshDisplay();
 }
 

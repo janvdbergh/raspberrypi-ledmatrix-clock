@@ -32,7 +32,7 @@ public:
 
   virtual int getTime() const;
   virtual void setTime(int minutesSinceStartOfWeek);
-  
+
   virtual void clear();
 private:
   rgb_matrix::RGBMatrix* _rgbMatrix;
@@ -40,6 +40,7 @@ private:
   rgb_matrix::Color _digitColor, _dayColor;
   rgb_matrix::Font* _font;
   int _minutesSinceStartOfWeek;
+  int _brightness;
 
   virtual void refreshDisplay();
   virtual void drawRectangle(int x, int y, int width, int height, const rgb_matrix::Color &color);

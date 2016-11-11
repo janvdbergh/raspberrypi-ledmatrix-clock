@@ -20,6 +20,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 using namespace rgb_matrix;
 
@@ -34,7 +35,6 @@ const int DIGIT_START_Y = 12;
 const float GAMMA = 2.2;
 
 ClockDisplay::ClockDisplay(): _digitColor(0, 0, 0), _dayColor(0, 0, 0), _minutesSinceStartOfWeek(-1) {
-  setBrightness(50);
 }
 
 ClockDisplay::~ClockDisplay() {
@@ -70,6 +70,8 @@ bool ClockDisplay::initialize(int argc, char *argv[]) {
   }
 
   _frameCanvas = _rgbMatrix->CreateFrameCanvas();
+
+  setBrightness(50);
 
   return true;
 }

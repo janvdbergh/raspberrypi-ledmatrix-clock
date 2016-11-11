@@ -8,6 +8,7 @@ This code requires
 - `/time <time in minutes since Sunday 00:00>`: display a time.
 - `/clear`: clear the display.
 - `/brightness <value>`: sets the brightness (0 - 255).
-- `/fade <value> <time>`: fades to certain brightness in specific time (in ms).
-- `/forward <time> <duration>`: forwards the time to the specified end time in duration ms.
-- `/showAndForward <start time> <end time> <brightness> <fade time> <forward time> <wait time>`: fades the clock in on start time, forwards it to end time, waits wait time and fades out again.
+- `/fade <value> <duration in ms>`: fades to certain brightness in specific time.
+- `/forward <time in minutes since Sunday 00:00> <duration in ms>`: forwards the time to the specified end time in duration ms.
+- `/show <time in minutes since Sunday 00:00> <brightness> <fade duration in ms> <wait duration in ms>`: fades the clock in on the given time, waits during wait duration and fades out again (duration in ms).
+- `/showAndForward <start time in minutes since Sunday 00:00> <end time in minutes since Sunday 00:00> <brightness> <fade duration in ms> <forward duration in ms> <wait duration in ms>`: fades the clock in on start time, forwards it to end time, waits wait time and fades out again.

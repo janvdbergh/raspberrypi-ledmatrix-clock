@@ -46,6 +46,7 @@ private:
   virtual void forwardTimeTo(const osc::ReceivedMessageArgumentStream argumentsStream);
   virtual void forwardTimeTo(int newTime, int durationMs);
 
+  virtual void show(const osc::ReceivedMessageArgumentStream argumentsStream);
   virtual void showAndForward(const osc::ReceivedMessageArgumentStream argumentsStream);
 };
 

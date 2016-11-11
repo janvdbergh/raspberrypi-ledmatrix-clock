@@ -43,6 +43,9 @@ void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message,
     if (strcmp(message.AddressPattern(), "/forward") == 0) {
         forwardTimeTo(arguments);
     }
+    if (strcmp(message.AddressPattern(), "/show") == 0) {
+        show(arguments);
+    }
     if (strcmp(message.AddressPattern(), "/showAndForward") == 0) {
         showAndForward(arguments);
     }
@@ -122,6 +125,19 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
   }
 
   clockDisplay.setTime(newTime);
+}
+
+void ClockOscPacketListener::show(osc::ReceivedMessageArgumentStream arguments) {
+  osc::int32 time, brightness, fadeTimeMs, waitTimeMs;
+  arguments >> time >> brightness >> fadeTimeMs >> waitTimeMs >> osc::EndMessage;
+
+  setBrightness(0);
+  setTime(time);
+  fadeBrightnessTo(brightness, fadeTimeMs);
+  usleep(waitTimeMs * 1000);
+  fadeBrightnessTo(0, fadeTimeMs);
+
+  clear();
 }
 
 void ClockOscPacketListener::showAndForward(osc::ReceivedMessageArgumentStream arguments) {

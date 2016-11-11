@@ -82,6 +82,10 @@ void ClockDisplay::setBrightness(int brightness) {
   refreshDisplay();
 }
 
+int ClockDisplay::getTime() const {
+  return _minutesSinceStartOfWeek;
+}
+
 void ClockDisplay::setTime(int minutesSinceStartOfWeek) {
   _minutesSinceStartOfWeek = minutesSinceStartOfWeek;
   refreshDisplay();

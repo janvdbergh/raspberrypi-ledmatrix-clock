@@ -44,7 +44,7 @@ private:
   virtual void fadeBrightnessTo(int newBrightness, int durationMs);
 
   virtual void forwardTimeTo(const osc::ReceivedMessageArgumentStream argumentsStream);
-  virtual void forwardTimeTo(int newTime, int durationMs);
+  virtual void forwardTimeTo(int newTime, int durationMs, float steepness);
 
   virtual void showAndForward(const osc::ReceivedMessageArgumentStream argumentsStream);
 };

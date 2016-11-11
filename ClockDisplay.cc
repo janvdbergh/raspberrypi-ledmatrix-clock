@@ -87,8 +87,10 @@ int ClockDisplay::getTime() const {
 }
 
 void ClockDisplay::setTime(int minutesSinceStartOfWeek) {
-  _minutesSinceStartOfWeek = minutesSinceStartOfWeek;
-  refreshDisplay();
+  if (minutesSinceStartOfWeek != _minutesSinceStartOfWeek) {
+    _minutesSinceStartOfWeek = minutesSinceStartOfWeek;
+    refreshDisplay();
+  }
 }
 
 void ClockDisplay::clear() {

@@ -16,12 +16,23 @@
  */
 
 #include <iostream>
+#include <unistd.h>
 #include <ip/UdpSocket.h>
 
 #include "ClockDisplay.h"
 #include "OscServer.h"
 
 #define PORT 7000
+
+void blinkClock(ClockDisplay& clockDisplay) {
+  clockDisplay.setTime(0);
+  for(int i=0; i<5; i++) {
+    clockDisplay.setBrightness(0.5);
+    usleep(500000);
+    clockDisplay.setBrightness(0);
+    usleep(500000);
+  }
+}
 
 int main(int argc, char *argv[]) {
   ClockDisplay clockDisplay;
@@ -33,6 +44,8 @@ int main(int argc, char *argv[]) {
   UdpListeningReceiveSocket udpReceiveSocket(
           IpEndpointName(IpEndpointName::ANY_ADDRESS, PORT),
           &oscPacketListener);
+
+  blinkClock(clockDisplay);
 
   std::cout << "Press ctrl-c to end" << std::endl;
 

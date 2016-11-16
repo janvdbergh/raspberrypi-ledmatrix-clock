@@ -47,7 +47,8 @@ private:
   virtual void forwardTimeTo(int newTime, int durationMs);
 
   virtual void show(const osc::ReceivedMessageArgumentStream argumentsStream);
-  virtual void showAndForward(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void hide(const osc::ReceivedMessageArgumentStream argumentsStream);
+  virtual void showForwardAndHide(const osc::ReceivedMessageArgumentStream argumentsStream);
 };
 
 #endif //RPI_OSC_SERVER_H

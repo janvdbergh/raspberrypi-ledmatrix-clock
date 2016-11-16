@@ -30,27 +30,25 @@ void ClockOscPacketListener::ProcessMessage(const osc::ReceivedMessage& message,
     osc::ReceivedMessageArgumentStream arguments = message.ArgumentStream();
     if (strcmp(message.AddressPattern(), "/clear") == 0) {
         clear(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/time") == 0) {
+    } else if (strcmp(message.AddressPattern(), "/time") == 0) {
       setTime(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/brightness") == 0) {
+    } else if (strcmp(message.AddressPattern(), "/brightness") == 0) {
         setBrightness(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/fade") == 0) {
+    } else if (strcmp(message.AddressPattern(), "/fade") == 0) {
         fadeBrightnessTo(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/forward") == 0) {
+    } else if (strcmp(message.AddressPattern(), "/forward") == 0) {
         forwardTimeTo(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/show") == 0) {
+    } else if (strcmp(message.AddressPattern(), "/show") == 0) {
         show(arguments);
-    }
-    if (strcmp(message.AddressPattern(), "/showAndForward") == 0) {
-        showAndForward(arguments);
+    } else if (strcmp(message.AddressPattern(), "/hide") == 0) {
+        hide(arguments);
+    } else if (strcmp(message.AddressPattern(), "/showForwardAndHide") == 0) {
+        showForwardAndHide(arguments);
+    } else {
+      std::cerr << "!!! Unknown command: " << message.AddressPattern() << std::endl;
     }
   } catch( osc::Exception& e ){
-    std::cerr << "!!! Error while parsing message: " << message.AddressPattern() << ": " << e.what() << "\n";
+    std::cerr << "!!! Error while parsing message: " << message.AddressPattern() << ": " << e.what() << std::endl;
   }
 }
 
@@ -129,20 +127,25 @@ void ClockOscPacketListener::forwardTimeTo(int newTime, int durationMs) {
 }
 
 void ClockOscPacketListener::show(osc::ReceivedMessageArgumentStream arguments) {
-  osc::int32 time, fadeTimeMs, waitTimeMs;
+  osc::int32 time, fadeTimeMs;
   float brightness;
-  arguments >> time >> brightness >> fadeTimeMs >> waitTimeMs >> osc::EndMessage;
+  arguments >> time >> brightness >> fadeTimeMs >> osc::EndMessage;
 
   setBrightness(0.0);
   setTime(time);
   fadeBrightnessTo(brightness, fadeTimeMs);
-  usleep(waitTimeMs * 1000);
+}
+
+void ClockOscPacketListener::hide(osc::ReceivedMessageArgumentStream arguments) {
+  osc::int32 fadeTimeMs;
+  arguments >> fadeTimeMs >> osc::EndMessage;
+
   fadeBrightnessTo(0.0, fadeTimeMs);
 
   clear();
 }
 
-void ClockOscPacketListener::showAndForward(osc::ReceivedMessageArgumentStream arguments) {
+void ClockOscPacketListener::showForwardAndHide(osc::ReceivedMessageArgumentStream arguments) {
   osc::int32 startTime, endTime, fadeTimeMs, forwardTimeMs, waitTimeMs;
   float brightness;
   arguments >> startTime >> endTime >> brightness >> fadeTimeMs >> forwardTimeMs >> waitTimeMs >> osc::EndMessage;
